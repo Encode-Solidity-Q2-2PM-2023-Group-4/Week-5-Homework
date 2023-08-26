@@ -1,4 +1,10 @@
+import { useEffect, useState } from "react";
 import styles from "./instructionsComponent.module.css";
+import { useAccount, useBalance, useContractRead, useNetwork } from "wagmi";
+import * as tokenJson from '../../../backend/artifacts/contracts/LotteryToken.sol/LotteryToken.json';
+import * as lotteryJson from '../../../backend/artifacts/contracts/Lottery.sol/Lottery.json';
+import 'dotenv/config';
+require('dotenv').config();
 
 export default function InstructionsComponent() {
   return (
@@ -6,59 +12,102 @@ export default function InstructionsComponent() {
       <header className={styles.header_container}>
         <div className={styles.header}>
           <h1>
-            create<span>-web3-dapp</span>
+            Lottery<span> Web3 dApp</span>
           </h1>
-          <h3>The ultimate solution to create web3 applications</h3>
+          <h3></h3>
         </div>
       </header>
-
-      <div className={styles.buttons_container}>
-        <a
-          target={"_blank"}
-          href={"https://createweb3dapp.alchemy.com/#components"}
-        >
-          <div className={styles.button}>
-            {/* <img src="https://static.alchemyapi.io/images/cw3d/Icon%20Medium/lightning-square-contained-m.svg" width={"20px"} height={"20px"} /> */}
-            <p>Add Components</p>
-          </div>
-        </a>
-        <a
-          target={"_blank"}
-          href={"https://createweb3dapp.alchemy.com/#templates"}
-        >
-          <div className={styles.button}>
-            {/* <img src="https://static.alchemyapi.io/images/cw3d/Icon%20Medium/lightning-square-contained-m.svg" width={"20px"} height={"20px"} /> */}
-            <p>Explore Templates</p>
-          </div>
-        </a>
-        <a
-          target={"_blank"}
-          href={"https://docs.alchemy.com/docs/create-web3-dapp"}
-        >
-          <div className={styles.button}>
-            <img
-              src="https://static.alchemyapi.io/images/cw3d/Icon%20Large/file-eye-01-l.svg"
-              width={"20px"}
-              height={"20px"}
-            />
-            <p>Visit Docs</p>
-          </div>
-        </a>
-        <a>
-          <div className={styles.button}>
-            {/* <img src="https://static.alchemyapi.io/images/cw3d/Icon%20Medium/lightning-square-contained-m.svg" width={"20px"} height={"20px"} /> */}
-            <p>Contribute</p>
-          </div>
-        </a>
-      </div>
-      <p className={styles.get_started}>
-        Get started by editing this page in <span>/pages/index.js</span>
-      </p>
+      <WalletInfo></WalletInfo>
+      <PageBody></PageBody>
     </div>
   );
 }
 
-function displayOwnerPool() {
+function PageBody() {
+  return (
+    <div>
+      <CheckState></CheckState>
+      <DisplayOwnerPool></DisplayOwnerPool>
+    </div>
+  )
+}
+
+function WalletInfo() {
+  const { address, isConnecting, isDisconnected } = useAccount();
+  const { chain } = useNetwork();
+  if (address)
+    return (
+      <div>
+        <p>Your account address is <b>{address}</b>.</p>
+        <p>Connected to the <b>{chain?.name}</b> network.</p>
+        <WalletBalance address={address}></WalletBalance>
+        <TokenName></TokenName>
+        <TokenBalance address={address}></TokenBalance>
+      </div>
+    );
+  if (isConnecting)
+    return (
+      <div>
+        <p>Connecting wallet...</p>
+      </div>
+    );
+  if (isDisconnected)
+    return (
+      <div>
+        <p>Wallet disconnected. Connect wallet to continue.</p>
+      </div>
+    );
+  return (
+    <div>
+      <p>Connect wallet to continue.</p>
+    </div>
+  );
+}
+
+function WalletBalance(params: { address: `0x${string}` }) {
+  const { data, isError, isLoading } = useBalance({
+    address: params.address,
+  });
+
+  if (isLoading) return <p>Fetching balance…</p>;
+  if (isError) return <p>Error fetching balance.</p>;
+  return (
+    <div>
+      <p>Balance: <b>{data?.formatted} {data?.symbol}</b></p>
+    </div>
+  );
+}
+
+function TokenName() {
+  const { data, isError, isLoading } = useContractRead({
+    address: "0xb498F8ADcf2ca6b131b87459c0449c4Bb3De23A7",
+    abi: tokenJson.abi,
+    functionName: "name",
+  });
+
+  const name = typeof data === "string" ? data : 0;
+
+  if (isLoading) return <p>Fetching name…</p>;
+  if (isError) return <p>Error fetching name.</p>;
+  return <p>Token name: <b>{name}</b></p>;
+}
+
+function TokenBalance(params: { address: `0x${string}` }) {
+  const { data, isError, isLoading } = useContractRead({
+    address: "0xb498F8ADcf2ca6b131b87459c0449c4Bb3De23A7",
+    abi: tokenJson.abi,
+    functionName: "balanceOf",
+    args: [params.address],
+  });
+
+  const balance = typeof data === "bigint" ? data : 0;
+
+  if (isLoading) return <p>Fetching balance...</p>;
+  if (isError) return <p>Error fetching balance.</p>;
+  return <p>Token balance: <b>{Number(balance)}</b> decimal units of <b>LotteryToken</b>.</p>;
+}
+
+function DisplayOwnerPool() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
   const {isConnected, isDisconnected} = useAccount();
@@ -82,7 +131,7 @@ function displayOwnerPool() {
   );
 }
 
-function checkState() {
+function CheckState() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
   const {isConnected, isDisconnected} = useAccount();

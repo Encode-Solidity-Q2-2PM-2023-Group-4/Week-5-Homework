@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
-import * as tokenJson from '../../backend/artifacts/contracts/LotteryToken.sol/LotteryToken.json'
-import * as lotteryJson from '../../backend/artifacts/contracts/Lottery.sol/Lottery.json'
+import * as tokenJson from '../../backend/artifacts/contracts/LotteryToken.sol/LotteryToken.json';
+import * as lotteryJson from '../../backend/artifacts/contracts/Lottery.sol/Lottery.json';
 import 'dotenv/config';
 require('dotenv').config();
 
@@ -37,7 +37,7 @@ export class AppService {
   }
 
   async openBets(address: string, closingTime: number): Promise<any> {
-    console.log("Opening lottery at " + address);
+    console.log("Opening lottery at " + address + "...");
     const openTX = await this.lotteryContract.openBets(closingTime);
     const receipt = await openTX.wait();
     console.log(receipt);
@@ -45,15 +45,25 @@ export class AppService {
   }
 
   async buyTokens(address: string, amount: number): Promise<any> {
-
+    console.log(`Purchasing ${amount} units of LTK for ${address}...`)
+    const tx = await this.lotteryContract.purchaseTokens();
+    const receipt = await tx.wait();
+    console.log(receipt);
+    return { success: true, txHash: tx.hash };
   }
 
   async tokenBalance(address: string): Promise <any> {
-
+    const balanceBN = await this.tokenContract.balanceOf(address);
+    const balance_ = Number(balanceBN);
+    return { success: true, balance: balance_ };
   }
 
   async withdrawTokens(address: string, amount: number): Promise<any> {
-    
+    console.log(`Withdrawing ${amount} units of LTK from the prize pool for ${address}...`)
+    const withdrawTX = await this.lotteryContract.prizeWithdraw(amount);
+    const receipt = await withdrawTX.wait();
+    console.log(receipt);
+    return { success: true, txHash: withdrawTX.hash };
   }
 
   async checkState(): Promise<any> {
@@ -61,7 +71,7 @@ export class AppService {
     const state = await this.lotteryContract.betsOpen();
     console.log(`The lottery is ${state ? "open" : "closed"}\n`);
     if (!state) return;
-    const currentBlock = await ethers.provider.getBlock("latest");
+    const currentBlock = await this.provider.getBlock("latest");
     const timestamp = currentBlock?.timestamp ?? 0;
     const currentBlockDate = new Date(timestamp * 1000);
     const closingTime = await this.lotteryContract.betsClosingTime();
