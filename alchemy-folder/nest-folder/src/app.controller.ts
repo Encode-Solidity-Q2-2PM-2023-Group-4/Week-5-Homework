@@ -10,4 +10,10 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Post('open-bets')
+  async openBets(@Body() body: openBetsDTO) {
+    console.log({ body });
+    return await this.appService.openBets(body.address, body.closingTime)
+  }
 }

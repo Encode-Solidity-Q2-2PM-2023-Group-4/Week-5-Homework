@@ -35,4 +35,12 @@ export class AppService {
   getHello(): string {
     return 'Hello World!';
   }
+
+  async openBets(address: string, closingTime: number): Promise<any> {
+    console.log("Opening lottery at " + address);
+    const openTX = await this.lotteryContract.openBets(closingTime);
+    const receipt = await openTX.wait();
+    console.log(receipt);
+    return { success: true, txHash: openTX.hash };
+  }
 }
