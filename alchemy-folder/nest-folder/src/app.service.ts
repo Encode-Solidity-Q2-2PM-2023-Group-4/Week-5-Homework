@@ -37,7 +37,7 @@ export class AppService {
   }
 
   async openBets(address: string, closingTime: number): Promise<any> {
-    console.log("Opening lottery at " + address);
+    console.log("Opening lottery at " + address + "...");
     const openTX = await this.lotteryContract.openBets(closingTime);
     const receipt = await openTX.wait();
     console.log(receipt);
@@ -45,11 +45,17 @@ export class AppService {
   }
 
   async buyTokens(address: string, amount: number): Promise<any> {
-
+    console.log(`Purchasing ${amount} units of LTK for ${address}...`)
+    const tx = await this.tokenContract.mint(address, amount);
+    const receipt = await tx.wait();
+    console.log(receipt);
+    return { success: true, txHash: tx.hash };
   }
 
   async tokenBalance(address: string): Promise <any> {
-
+    const balanceBN = await this.tokenContract.balanceOf(address);
+    const balance_ = Number(balanceBN);
+    return { success: true, balance: balance_ };
   }
 
   async withdrawTokens(address: string, amount: number): Promise<any> {
