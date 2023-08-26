@@ -35,4 +35,14 @@ export class AppController {
     console.log({ body });
     return await this.appService.withdrawTokens(body.address, body.amount);
   }
+  
+  @Get('check-state')
+  async checkState(){
+    return await this.appService.checkState();
+  }
+
+  @Get('display-owner-pool')
+  async displayOwnerPool(){
+    return await this.appService.displayOwnerPool();
+  }
 }
