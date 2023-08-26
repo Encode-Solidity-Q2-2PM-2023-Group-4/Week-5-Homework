@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import styles from "./instructionsComponent.module.css";
+import { useAccount } from "wagmi";
 
 export default function InstructionsComponent() {
   return (

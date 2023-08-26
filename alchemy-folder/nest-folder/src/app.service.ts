@@ -71,7 +71,7 @@ export class AppService {
     const state = await this.lotteryContract.betsOpen();
     console.log(`The lottery is ${state ? "open" : "closed"}\n`);
     if (!state) return;
-    const currentBlock = await ethers.provider.getBlock("latest");
+    const currentBlock = await this.provider.getBlock("latest");
     const timestamp = currentBlock?.timestamp ?? 0;
     const currentBlockDate = new Date(timestamp * 1000);
     const closingTime = await this.lotteryContract.betsClosingTime();
