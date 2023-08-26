@@ -28,6 +28,7 @@ function PageBody() {
     <div>
       <CheckState></CheckState>
       <DisplayOwnerPool></DisplayOwnerPool>
+      <CloseLottery></CloseLottery>
     </div>
   )
 }
@@ -113,7 +114,7 @@ function DisplayOwnerPool() {
   const {isConnected, isDisconnected} = useAccount();
 
   useEffect(() => {
-    fetch("https://localhost:3001/display-owner-pool'")
+    fetch("https://localhost:3001/display-owner-pool")
       .then((res) => res.json())
       .then((data) => {
         setData(data.results[0]);
@@ -137,7 +138,7 @@ function CheckState() {
   const {isConnected, isDisconnected} = useAccount();
 
   useEffect(() => {
-    fetch("https://localhost:3001/check-state'")
+    fetch("https://localhost:3001/check-state")
       .then((res) => res.json())
       .then((data) => {
         setData(data.results[0]);
@@ -146,6 +147,34 @@ function CheckState() {
   }, []);
 
   if (isLoading) return <p>Loading...</p>;
+  if (!data) return <p>No profile data</p>;
+
+  return (
+    <div>
+      <p>{data}</p>
+    </div>
+  );
+}
+
+
+function CloseLottery() {
+  const [data, setData] = useState<any>(null);
+  const [isLoading, setLoading] = useState(true);
+  const {isConnected, isDisconnected} = useAccount();
+
+  useEffect(() => {
+    fetch("https://localhost:3001/close-lottery")
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data.results[0]);
+        setLoading(false);
+      });
+  }, []);
+
+  if (isLoading) return (
+    <div className={styles.button}>
+      CLOSE LOTTERY
+    </div>
   if (!data) return <p>No profile data</p>;
 
   return (
