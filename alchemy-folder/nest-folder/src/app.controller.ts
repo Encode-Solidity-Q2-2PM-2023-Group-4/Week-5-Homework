@@ -26,11 +26,6 @@ export class AppController {
     return await this.appService.buyTokens(body.address, body.amount);
   }
 
-  @Get('display-tkn-balance')
-  async tokenBalance(@Param('address') address: string) {
-    return await this.appService.tokenBalance(address);
-  }
-
   @Post('withdraw-tokens')
   async withdrawTokens(@Body() body: wihdrawTokensDTO) {
     console.log({ body });
@@ -49,7 +44,7 @@ export class AppController {
 
    /// @notice Burns `amount` tokens and give the equivalent ETH back to user
   @Post('burn-tokens')
-  async burnTokens(@Body() body: burntokensDTO) {
+  async burnTokens(@Body() body: burnTokensDTO) {
     console.log({ body });
     return await this.appService.burnTokens(body.amount);
   }
@@ -58,7 +53,4 @@ export class AppController {
   async closeLottery() {
     return await this.appService.closeLottery();
   }
-
-
-  
 }

@@ -110,10 +110,9 @@ function TokenBalance(params: { address: `0x${string}` }) {
 function DisplayOwnerPool() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
-  const {isConnected, isDisconnected} = useAccount();
 
   useEffect(() => {
-    fetch("https://localhost:3001/display-owner-pool'")
+    fetch("https://localhost:3001/display-owner-pool")
       .then((res) => res.json())
       .then((data) => {
         setData(data.results[0]);
@@ -134,10 +133,9 @@ function DisplayOwnerPool() {
 function CheckState() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
-  const {isConnected, isDisconnected} = useAccount();
 
   useEffect(() => {
-    fetch("https://localhost:3001/check-state'")
+    fetch("https://localhost:3001/check-state")
       .then((res) => res.json())
       .then((data) => {
         setData(data.results[0]);
