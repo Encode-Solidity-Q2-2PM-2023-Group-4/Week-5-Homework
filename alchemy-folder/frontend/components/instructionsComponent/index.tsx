@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./instructionsComponent.module.css";
 import { useAccount, useBalance, useContractRead, useNetwork } from "wagmi";
-import * as tokenJson from '../../../backend/artifacts/contracts/LotteryToken.sol/LotteryToken.json';
+import tokenJson from '../../../backend/artifacts/contracts/LotteryToken.sol/LotteryToken.json';
 import * as lotteryJson from '../../../backend/artifacts/contracts/Lottery.sol/Lottery.json';
 import 'dotenv/config';
 require('dotenv').config();
@@ -154,7 +154,6 @@ function CheckState() {
   );
 }
 
-
 function CloseLottery() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
@@ -173,6 +172,7 @@ function CloseLottery() {
     <div className={styles.button}>
       CLOSE LOTTERY
     </div>
+  )
   if (!data) return <p>No profile data</p>;
 
   return (

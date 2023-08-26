@@ -61,7 +61,6 @@ export class AppService {
   }
 
   async checkState(): Promise<any> {
-    const thisProvider = this.provider;
     const state = await this.lotteryContract.betsOpen();
     console.log(`The lottery is ${state ? "open" : "closed"}\n`);
     if (!state) return;
@@ -84,15 +83,16 @@ export class AppService {
   }
 
   async closeLottery(): Promise<any> {
-    console.log("Closing lottery at " + address);
-    const openTX = await this.lotteryContract.closeLottery();
-    const receipt = await openTX.wait();
+    console.log("Closing lottery at " + this.lotteryContract.address);
+    const closeTX = await this.lotteryContract.closeLottery();
+    const receipt = await closeTX.wait();
+    const state = await this.lotteryContract.betsOpen();
     const winner = await this.lotteryContract.winner();
     const prize = await this.lotteryContract.prizePool();
     console.log(`The lottery is ${state ? "open" : "closed"}\n and the winner address is: ${winner} who won ${prize}`);
     
     console.log(receipt);
-    return { success: true, txHash: openTX.hash };
+    return { success: true, txHash: closeTX.hash };
   }
 
   async burnTokens(amount: number): Promise<any> {
