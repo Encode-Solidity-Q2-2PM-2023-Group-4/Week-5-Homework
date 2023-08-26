@@ -88,4 +88,27 @@ export class AppService {
     const balance = ethers.formatUnits(balanceBN);
     return (console.log(`The owner pool has (${balance}) Tokens \n`))
   }
+
+  async closeLottery(): Promise<any> {
+    console.log("Closing lottery at " + address);
+    const openTX = await this.lotteryContract.closeLottery();
+    const receipt = await openTX.wait();
+    const winner = await this.lotteryContract.winner();
+    const prize = await this.lotteryContract.prizePool();
+    console.log(`The lottery is ${state ? "open" : "closed"}\n and the winner address is: ${winner} who won ${prize}`);
+    
+    console.log(receipt);
+    return { success: true, txHash: openTX.hash };
+  }
+
+  async burnTokens(amount: number): Promise<any> {
+    console.log(`Burning ${amount} units of LTK in exchange for ETH back to user`)
+    const withdrawTX = await this.lotteryContract.returnTokens(amount);
+    const receipt = await withdrawTX.wait();
+    console.log(receipt);
+    return { success: true, txHash: withdrawTX.hash };
+  }
+
+
+  
 }
