@@ -52,12 +52,6 @@ export class AppService {
     return { success: true, txHash: tx.hash };
   }
 
-  async tokenBalance(address: string): Promise <any> {
-    const balanceBN = await this.tokenContract.balanceOf(address);
-    const balance_ = Number(balanceBN);
-    return { success: true, balance: balance_ };
-  }
-
   async withdrawTokens(address: string, amount: number): Promise<any> {
     console.log(`Withdrawing ${amount} units of LTK from the prize pool for ${address}...`)
     const withdrawTX = await this.lotteryContract.prizeWithdraw(amount);
