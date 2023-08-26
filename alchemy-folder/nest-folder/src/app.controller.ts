@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { openBetsDTO } from './dtos/openBets.dto';
 import { buyTokensDTO } from './dtos/buyTokens.dto';
 import { wihdrawTokensDTO } from './dtos/withdrawTokens.dto';
+import { burnTokensDTO } from './dtos/burnTokens.dto';
 
 @Controller()
 export class AppController {
@@ -54,8 +55,7 @@ export class AppController {
   }
 
   @Post('close-lottery')
-  async closeLottery(@Body() body: closeLotteryDTO) {
-    console.log({ body });
+  async closeLottery() {
     return await this.appService.closeLottery();
   }
 
