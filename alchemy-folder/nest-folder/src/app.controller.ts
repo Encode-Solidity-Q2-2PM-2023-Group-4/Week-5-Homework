@@ -45,4 +45,20 @@ export class AppController {
   async displayOwnerPool(){
     return await this.appService.displayOwnerPool();
   }
+
+   /// @notice Burns `amount` tokens and give the equivalent ETH back to user
+  @Post('burn-tokens')
+  async burnTokens(@Body() body: burntokensDTO) {
+    console.log({ body });
+    return await this.appService.burnTokens(body.amount);
+  }
+
+  @Post('close-lottery')
+  async closeLottery(@Body() body: closeLotteryDTO) {
+    console.log({ body });
+    return await this.appService.closeLottery();
+  }
+
+
+  
 }
