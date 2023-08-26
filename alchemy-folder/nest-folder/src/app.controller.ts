@@ -50,8 +50,7 @@ export class AppController {
   }
 
   @Post('close-lottery')
-  async closeLottery(@Body() body: closeLotteryDTO) {
-    console.log({ body });
+  async closeLottery() {
     return await this.appService.closeLottery();
   }
 }
