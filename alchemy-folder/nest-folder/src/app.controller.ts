@@ -3,6 +3,7 @@ import { AppService } from './app.service';
 import { openBetsDTO } from './dtos/openBets.dto';
 import { buyTokensDTO } from './dtos/buyTokens.dto';
 import { wihdrawTokensDTO } from './dtos/withdrawTokens.dto';
+import { burnTokensDTO } from './dtos/burnTokens.dto';
 
 @Controller()
 export class AppController {
@@ -43,7 +44,7 @@ export class AppController {
 
    /// @notice Burns `amount` tokens and give the equivalent ETH back to user
   @Post('burn-tokens')
-  async burnTokens(@Body() body: burntokensDTO) {
+  async burnTokens(@Body() body: burnTokensDTO) {
     console.log({ body });
     return await this.appService.burnTokens(body.amount);
   }
