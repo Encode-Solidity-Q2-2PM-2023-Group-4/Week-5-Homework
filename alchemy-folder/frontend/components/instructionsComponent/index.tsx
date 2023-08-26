@@ -154,7 +154,6 @@ function CheckState() {
   );
 }
 
-
 function CloseLottery() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
@@ -173,6 +172,7 @@ function CloseLottery() {
     <div className={styles.button}>
       CLOSE LOTTERY
     </div>
+  )
   if (!data) return <p>No profile data</p>;
 
   return (
