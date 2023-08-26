@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
-import * as tokenJson from '../../backend/artifacts/contracts/LotteryToken.sol/LotteryToken.json'
-import * as lotteryJson from '../../backend/artifacts/contracts/Lottery.sol/Lottery.json'
+import * as tokenJson from '../../backend/artifacts/contracts/LotteryToken.sol/LotteryToken.json';
+import * as lotteryJson from '../../backend/artifacts/contracts/Lottery.sol/Lottery.json';
 import 'dotenv/config';
 require('dotenv').config();
 
