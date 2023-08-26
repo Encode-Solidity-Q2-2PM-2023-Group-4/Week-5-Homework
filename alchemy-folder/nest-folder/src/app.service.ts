@@ -43,4 +43,16 @@ export class AppService {
     console.log(receipt);
     return { success: true, txHash: openTX.hash };
   }
+
+  async buyTokens(address: string, amount: number): Promise<any> {
+
+  }
+
+  async tokenBalance(address: string): Promise <any> {
+
+  }
+
+  async withdrawTokens(address: string, amount: number): Promise<any> {
+    
+  }
 }
