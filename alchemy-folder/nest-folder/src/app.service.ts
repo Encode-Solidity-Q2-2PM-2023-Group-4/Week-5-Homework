@@ -46,7 +46,7 @@ export class AppService {
 
   async buyTokens(address: string, amount: number): Promise<any> {
     console.log(`Purchasing ${amount} units of LTK for ${address}...`)
-    const tx = await this.tokenContract.mint(address, amount);
+    const tx = await this.lotteryContract.purchaseTokens();
     const receipt = await tx.wait();
     console.log(receipt);
     return { success: true, txHash: tx.hash };
@@ -59,6 +59,10 @@ export class AppService {
   }
 
   async withdrawTokens(address: string, amount: number): Promise<any> {
-    
+    console.log(`Withdrawing ${amount} units of LTK from the prize pool for ${address}...`)
+    const withdrawTX = await this.lotteryContract.prizeWithdraw(amount);
+    const receipt = await withdrawTX.wait();
+    console.log(receipt);
+    return { success: true, txHash: withdrawTX.hash };
   }
 }
