@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./instructionsComponent.module.css";
-import { useAccount, useBalance, useContractRead, useNetwork } from "wagmi";
+import { useAccount, useBalance, useContractRead, useNetwork, usePrepareSendTransaction, useSendTransaction } from "wagmi";
 import tokenJson from '../../../backend/artifacts/contracts/LotteryToken.sol/LotteryToken.json';
 import * as lotteryJson from '../../../backend/artifacts/contracts/Lottery.sol/Lottery.json';
 import 'dotenv/config';
@@ -44,6 +44,8 @@ function WalletInfo() {
         <WalletBalance address={address}></WalletBalance>
         <TokenName></TokenName>
         <TokenBalance address={address}></TokenBalance>
+        <BuyTokens address={address}></BuyTokens>
+        <WithdrawTokens address={address}></WithdrawTokens>
       </div>
     );
   if (isConnecting)
@@ -154,10 +156,84 @@ function CheckState() {
   );
 }
 
+function BuyTokens(params: {address: string}) {
+  const { config } = usePrepareSendTransaction();
+  const { data, isLoading, isSuccess } = useSendTransaction(config);
+  const [amount, setAmount] = useState("");
+
+  if (isLoading) return <p>Requesting purchase from API...</p>;
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address: params.address, amount: amount })
+  };
+
+  if (!data) return (
+    <div>
+      <form>
+        <label>
+          Enter amount of tokens to purchase:
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)} 
+          />
+        </label>
+      </form>
+      <button
+        disabled={isLoading} 
+        onClick={() => fetch("http://localhost:3001/buy-tokens", requestOptions)}>
+        Buy Tokens
+      </button>
+      {isLoading && <div>Check Wallet</div>}
+      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
+    </div>
+  )
+  return <></>
+}
+
+function WithdrawTokens(params: { address: string }) {
+  const { config } = usePrepareSendTransaction();
+  const { data, isLoading, isSuccess } = useSendTransaction(config);
+  const [amount, setAmount] = useState("");
+
+  if (isLoading) return <p>Requesting withdraw from API...</p>;
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ address: params.address, amount: amount })
+  };
+
+  if (!data) return (
+    <div>
+      <form>
+        <label>
+          Enter amount of tokens to withdraw:
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)} 
+          />
+        </label>
+      </form>
+      <button
+        disabled={isLoading} 
+        onClick={() => fetch("http://localhost:3001/withdraw-tokens", requestOptions)}>
+        Withdraw Tokens
+      </button>
+      {isLoading && <div>Check Wallet...</div>}
+      {!isSuccess && <div>Failure fetching withdrawal.</div>}
+      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
+    </div>
+  )
+  return <></>
+}
+
 function CloseLottery() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
-  const {isConnected, isDisconnected} = useAccount();
 
   useEffect(() => {
     fetch("https://localhost:3001/close-lottery")
