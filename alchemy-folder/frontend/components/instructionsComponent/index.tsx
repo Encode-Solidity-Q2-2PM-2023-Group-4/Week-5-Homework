@@ -144,7 +144,7 @@ function DisplayOwnerPool() {
 
 function CheckState() {
   const [data, setData] = useState<any>(null);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   if (!data) return (
     <button
