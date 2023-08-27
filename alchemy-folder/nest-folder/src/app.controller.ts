@@ -58,4 +58,10 @@ export class AppController {
   async bet() {
     return await this.appService.bet();
   }
+
+  @Post('claim-prize')
+  async claimPrize(@Body() body: claimPrizeDTO) {
+    console.log({ body });
+    return await this.appService.claimPrize(body.amount);
+  }
 }
