@@ -194,7 +194,7 @@ function BuyTokens(params: {address: string}) {
 }
 
 function withdrawTokens() {
-
+  
 }
 
 function CloseLottery() {

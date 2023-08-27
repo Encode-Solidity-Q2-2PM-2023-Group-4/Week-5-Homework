@@ -9,7 +9,6 @@ function setupProvider() {
 }
 
 async function main() {
-    const factory = require('node-factories');
     const provider = setupProvider();
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? "", provider);
     const balanceBN = await provider.getBalance(wallet.address);
@@ -22,7 +21,8 @@ async function main() {
     const lotteryContract = await lotteryFactory.deploy("LotteryToken", "LTK", 1000, 10, 1);
     await lotteryContract.waitForDeployment();
     const address = await lotteryContract.getAddress();
-    console.log(`\nVoting Token contract deployed to the address ${address}.`)
+    const tokenAddress = await lotteryContract.paymentToken();
+    console.log(`\nLottery contract deployed to the address ${address}, with payment token at ${tokenAddress}.`)
     console.log(`Wallet balance ${balance}.`);
 }
 
