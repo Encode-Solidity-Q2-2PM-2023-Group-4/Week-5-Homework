@@ -44,9 +44,10 @@ export class AppService {
     return { success: true, txHash: openTX.hash };
   }
 
-  async buyTokens(address: string, amount: number): Promise<any> {
-    console.log(`Purchasing ${amount} units of LTK for ${address}...`)
-    const tx = await this.lotteryContract.purchaseTokens({ value: ethers.parseUnits(String(amount)) });
+  //input 1 means user gets 1 eth worth of tokens, so here 1*1000 tokens
+  async buyTokens(value: number): Promise<any> {
+    console.log(`Purchasing lottery tokens worth of ` + value + `ETH` )
+    const tx = await this.lotteryContract.purchaseTokens(ethers.parseEther(String(value)));
     const receipt = await tx.wait();
     console.log(receipt);
     return { success: true, txHash: tx.hash };
