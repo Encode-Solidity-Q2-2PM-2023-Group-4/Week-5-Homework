@@ -113,6 +113,13 @@ export class AppService {
     return { success: true, txHash: betTx.hash };
   }
 
+  async claimPrize(amount: number) {
+    console.log(`Claiming ${amount} prize....`)
+    const claimTx = await this.lotteryContract.prizeWithdraw(amount);
+    const receipt = await claimTx.wait();
+    console.log(receipt);
+    return { success: true, claimTxHash: claimTx.hash };
+  }
 
 
   
