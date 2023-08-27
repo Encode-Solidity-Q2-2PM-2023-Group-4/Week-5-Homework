@@ -23,7 +23,7 @@ export class AppController {
   @Post('buy-tokens')
   async buyTokens(@Body() body: buyTokensDTO) {
     console.log({ body });
-    return await this.appService.buyTokens(body.address, body.amount);
+    return await this.appService.buyTokens(body.value);
   }
 
   @Post('withdraw-tokens')
