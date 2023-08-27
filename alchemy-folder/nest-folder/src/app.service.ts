@@ -98,6 +98,7 @@ export class AppService {
 
   async burnTokens(amount: number): Promise<any> {
     console.log(`Burning ${amount} units of LTK in exchange for ETH back to user`)
+    const approval = await this.tokenContract.approve(process.env.LOTTERY_ADDRESS, ethers.parseEther(String("1")));
     const withdrawTX = await this.lotteryContract.returnTokens(amount);
     const receipt = await withdrawTX.wait();
     console.log(receipt);
@@ -106,7 +107,7 @@ export class AppService {
 
   async bet(): Promise<any>{
     console.log(`Submitting a bet`);
-    const approval = await this.tokenContract.approve(process.env.LOTTERY_ADDRESS, 5000)
+    const approval = await this.tokenContract.approve(process.env.LOTTERY_ADDRESS, ethers.parseEther(String("1")));
     const betTx = await this.lotteryContract.bet();
     const receipt = await betTx.wait();
     console.log(receipt);
