@@ -45,8 +45,8 @@ function WalletInfo() {
         <WalletBalance address={address}></WalletBalance>
         <TokenName></TokenName>
         <TokenBalance address={address}></TokenBalance>
-        <BuyTokens address={address}></BuyTokens>
-        <WithdrawTokens address={address}></WithdrawTokens>
+        <BuyTokens></BuyTokens>
+        <WithdrawTokens></WithdrawTokens>
       </div>
     );
   if (isConnecting)
@@ -173,7 +173,7 @@ function CheckState() {
   );
 }
 
-function BuyTokens(params: {value: number}) {
+function BuyTokens() {
   const { config } = usePrepareSendTransaction();
   const { data, isLoading, isSuccess } = useSendTransaction(config);
   const [amount, setAmount] = useState("");
@@ -193,7 +193,7 @@ function BuyTokens(params: {value: number}) {
           Enter amount of tokens to purchase:
           <input
             type="number"
-            value={value}
+            value={amount}
             onChange={(e) => setAmount(e.target.value)} 
           />
         </label>
@@ -210,7 +210,7 @@ function BuyTokens(params: {value: number}) {
   return <></>
 }
 
-function WithdrawTokens(params: { amount: number }) {
+function WithdrawTokens() {
   const { config } = usePrepareSendTransaction();
   const { data, isLoading, isSuccess } = useSendTransaction(config);
   const [amount, setAmount] = useState("");
@@ -316,4 +316,41 @@ function Bet() {
       <p>{data}</p>
     </div>
   );
+}
+
+function burnTokens() {
+  const { config } = usePrepareSendTransaction();
+  const { data, isLoading, isSuccess } = useSendTransaction(config);
+  const [amount, setAmount] = useState("");
+
+  if (isLoading) return <p>Requesting burn from API...</p>;
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: amount })
+  };
+
+  if (!data) return (
+    <div>
+      <form>
+        <label>
+          Enter amount of tokens to burn:
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)} 
+          />
+        </label>
+      </form>
+      <button
+        disabled={isLoading} 
+        onClick={() => fetch("http://localhost:3001/burn-tokens", requestOptions)}>
+        Burn Tokens
+      </button>
+      {isLoading && <div>Check Wallet</div>}
+      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
+    </div>
+  )
+  return <></>
 }
