@@ -53,4 +53,9 @@ export class AppController {
   async closeLottery() {
     return await this.appService.closeLottery();
   }
+
+  @Post('bet')
+  async bet() {
+    return await this.appService.bet();
+  }
 }
