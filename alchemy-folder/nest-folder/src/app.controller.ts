@@ -4,6 +4,7 @@ import { openBetsDTO } from './dtos/openBets.dto';
 import { buyTokensDTO } from './dtos/buyTokens.dto';
 import { wihdrawTokensDTO } from './dtos/withdrawTokens.dto';
 import { burnTokensDTO } from './dtos/burnTokens.dto';
+import { claimPrizeDTO } from './dtos/claimPrize.dto';
 
 @Controller()
 export class AppController {

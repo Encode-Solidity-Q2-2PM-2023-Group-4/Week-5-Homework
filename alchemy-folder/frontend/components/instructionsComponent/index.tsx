@@ -25,8 +25,9 @@ export default function InstructionsComponent() {
 
 function PageBody() {
   return (
-    <div>
+    <div className={styles.buttons_container}>
       <CheckState></CheckState>
+      <Bet></Bet>
       <DisplayOwnerPool></DisplayOwnerPool>
       <CloseLottery></CloseLottery>
     </div>
@@ -114,17 +115,25 @@ function DisplayOwnerPool() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("https://localhost:3001/display-owner-pool")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.results[0]);
-        setLoading(false);
-      });
-  }, []);
+  if (!data) return (
+    <button
+        disabled={isLoading}
+        className={styles.button}
+        onClick={() => {
+          setLoading(true);
+          fetch("http://localhost:3001/display-owner-pool")
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data);
+            setLoading(false)
+          });
+        }}
+    >
+      Display Owner Pool
+    </button>
+  );
 
   if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No profile data</p>;
 
   return (
     <div>
@@ -137,17 +146,25 @@ function CheckState() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("https://localhost:3001/check-state")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.results[0]);
-        setLoading(false);
-      });
-  }, []);
+  if (!data) return (
+    <button
+        disabled={isLoading}
+        className={styles.button}
+        onClick={() => {
+          setLoading(true);
+          fetch("http://localhost:3001/check-state")
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data);
+            setLoading(false)
+          });
+        }}
+    >
+      Check state
+    </button>
+  );
 
   if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No profile data</p>;
 
   return (
     <div>
@@ -224,7 +241,7 @@ function WithdrawTokens(params: { address: string }) {
         Withdraw Tokens
       </button>
       {isLoading && <div>Check Wallet...</div>}
-      {!isSuccess && <div>Failure fetching withdrawal.</div>}
+      {!isSuccess && isLoading && <div>Failure fetching withdrawal.</div>}
       {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
     </div>
   )
@@ -233,23 +250,66 @@ function WithdrawTokens(params: { address: string }) {
 
 function CloseLottery() {
   const [data, setData] = useState<any>(null);
-  const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("https://localhost:3001/close-lottery")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.results[0]);
-        setLoading(false);
-      });
-  }, []);
+  const [isLoading, setLoading] = useState(false);
 
   if (isLoading) return (
     <div className={styles.button}>
-      CLOSE LOTTERY
+      Loading...
     </div>
   )
-  if (!data) return <p>No profile data</p>;
+
+  if (!data) return (
+    <button
+        disabled={isLoading}
+        className={styles.button}
+        onClick={() => {
+          setLoading(true);
+          fetch("http://localhost:3001/close-lottery")
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data);
+            setLoading(false)
+          });
+        }}
+    >
+      Close Lottery
+    </button>
+  );
+
+  return (
+    <div>
+      <p>{data}</p>
+    </div>
+  );
+}
+
+function Bet() {
+  const [data, setData] = useState<any>(null);
+  const [isLoading, setLoading] = useState(false);
+
+  if (isLoading) return (
+    <div className={styles.button}>
+      Loading...
+    </div>
+  )
+
+  if (!data) return (
+    <button
+        disabled={isLoading}
+        className={styles.button}
+        onClick={() => {
+          setLoading(true);
+          fetch("http://localhost:3001/bet")
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data);
+            setLoading(false)
+          });
+        }}
+    >
+      Place Bet
+    </button>
+  );
 
   return (
     <div>
