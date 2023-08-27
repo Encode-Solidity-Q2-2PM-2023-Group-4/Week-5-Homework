@@ -104,6 +104,16 @@ export class AppService {
     return { success: true, txHash: withdrawTX.hash };
   }
 
+  async bet(): Promise<any>{
+    console.log(`Submitting a bet`);
+    const approval = await this.tokenContract.approve(process.env.LOTTERY_ADDRESS, 5000)
+    const betTx = await this.lotteryContract.bet();
+    const receipt = await betTx.wait();
+    console.log(receipt);
+    return { success: true, txHash: betTx.hash };
+  }
+
+
 
   
 }
