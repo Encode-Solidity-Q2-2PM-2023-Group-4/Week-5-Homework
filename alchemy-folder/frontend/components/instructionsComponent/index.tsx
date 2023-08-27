@@ -173,7 +173,7 @@ function CheckState() {
   );
 }
 
-function BuyTokens(params: {address: string}) {
+function BuyTokens(params: {value: number}) {
   const { config } = usePrepareSendTransaction();
   const { data, isLoading, isSuccess } = useSendTransaction(config);
   const [amount, setAmount] = useState("");
@@ -183,7 +183,7 @@ function BuyTokens(params: {address: string}) {
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ address: params.address, amount: amount })
+    body: JSON.stringify({ amount: amount })
   };
 
   if (!data) return (
@@ -193,7 +193,7 @@ function BuyTokens(params: {address: string}) {
           Enter amount of tokens to purchase:
           <input
             type="number"
-            value={amount}
+            value={value}
             onChange={(e) => setAmount(e.target.value)} 
           />
         </label>
@@ -210,7 +210,7 @@ function BuyTokens(params: {address: string}) {
   return <></>
 }
 
-function WithdrawTokens(params: { address: string }) {
+function WithdrawTokens(params: { amount: number }) {
   const { config } = usePrepareSendTransaction();
   const { data, isLoading, isSuccess } = useSendTransaction(config);
   const [amount, setAmount] = useState("");
@@ -220,7 +220,7 @@ function WithdrawTokens(params: { address: string }) {
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ address: params.address, amount: amount })
+    body: JSON.stringify({ amount: amount })
   };
 
   if (!data) return (
