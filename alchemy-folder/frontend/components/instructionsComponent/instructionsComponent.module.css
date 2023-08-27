@@ -80,6 +80,7 @@ box-shadow: 2px 2px 3px rgb(142, 142, 142);
 border-radius: 12px;
 cursor: pointer;
 transition: all .5s;
+color:whitesmoke;
 }
 
 .button:hover{
