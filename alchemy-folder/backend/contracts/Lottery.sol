@@ -78,8 +78,8 @@ contract Lottery is Ownable {
 
     /// @notice Gives tokens based on the amount of ETH sent
     /// @dev This implementation is prone to rounding problems
-    function purchaseTokens() external payable {
-        paymentToken.mint(msg.sender, msg.value * purchaseRatio);
+    function purchaseTokens(uint256 value) external payable {
+        paymentToken.mint(msg.sender, value * purchaseRatio);
     }
 
     /// @notice Charges the bet price and creates a new bet slot with the sender's address
