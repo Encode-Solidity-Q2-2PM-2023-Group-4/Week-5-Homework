@@ -157,7 +157,7 @@ function CheckState() {
 
 function BuyTokens(params: {address: string}) {
   const { config } = usePrepareSendTransaction();
-  const { data, isLoading, isSuccess, sendTransaction } = useSendTransaction(config);
+  const { data, isLoading, isSuccess } = useSendTransaction(config);
   const [amount, setAmount] = useState("");
 
 
@@ -191,6 +191,10 @@ function BuyTokens(params: {address: string}) {
     </div>
   )
   return <></>
+}
+
+function withdrawTokens() {
+
 }
 
 function CloseLottery() {
