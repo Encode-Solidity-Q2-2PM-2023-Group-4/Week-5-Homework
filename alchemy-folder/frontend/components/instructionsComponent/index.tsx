@@ -25,8 +25,9 @@ export default function InstructionsComponent() {
 
 function PageBody() {
   return (
-    <div>
+    <div className={styles.buttons_container}>
       <CheckState></CheckState>
+      <Bet></Bet>
       <DisplayOwnerPool></DisplayOwnerPool>
       <CloseLottery></CloseLottery>
     </div>
@@ -44,8 +45,8 @@ function WalletInfo() {
         <WalletBalance address={address}></WalletBalance>
         <TokenName></TokenName>
         <TokenBalance address={address}></TokenBalance>
-        <BuyTokens address={address}></BuyTokens>
-        <WithdrawTokens address={address}></WithdrawTokens>
+        <BuyTokens></BuyTokens>
+        <WithdrawTokens></WithdrawTokens>
       </div>
     );
   if (isConnecting)
@@ -114,17 +115,25 @@ function DisplayOwnerPool() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("https://localhost:3001/display-owner-pool")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.results[0]);
-        setLoading(false);
-      });
-  }, []);
+  if (!data) return (
+    <button
+        disabled={isLoading}
+        className={styles.button}
+        onClick={() => {
+          setLoading(true);
+          fetch("http://localhost:3001/display-owner-pool")
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data);
+            setLoading(false)
+          });
+        }}
+    >
+      Display Owner Pool
+    </button>
+  );
 
   if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No profile data</p>;
 
   return (
     <div>
@@ -137,17 +146,25 @@ function CheckState() {
   const [data, setData] = useState<any>(null);
   const [isLoading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("https://localhost:3001/check-state")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.results[0]);
-        setLoading(false);
-      });
-  }, []);
+  if (!data) return (
+    <button
+        disabled={isLoading}
+        className={styles.button}
+        onClick={() => {
+          setLoading(true);
+          fetch("http://localhost:3001/check-state")
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data);
+            setLoading(false)
+          });
+        }}
+    >
+      Check state
+    </button>
+  );
 
   if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No profile data</p>;
 
   return (
     <div>
@@ -156,7 +173,7 @@ function CheckState() {
   );
 }
 
-function BuyTokens(params: {value: number}) {
+function BuyTokens() {
   const { config } = usePrepareSendTransaction();
   const { data, isLoading, isSuccess } = useSendTransaction(config);
   const [amount, setAmount] = useState("");
@@ -176,7 +193,7 @@ function BuyTokens(params: {value: number}) {
           Enter amount of tokens to purchase:
           <input
             type="number"
-            value={value}
+            value={amount}
             onChange={(e) => setAmount(e.target.value)} 
           />
         </label>
@@ -193,7 +210,7 @@ function BuyTokens(params: {value: number}) {
   return <></>
 }
 
-function WithdrawTokens(params: { amount: number }) {
+function WithdrawTokens() {
   const { config } = usePrepareSendTransaction();
   const { data, isLoading, isSuccess } = useSendTransaction(config);
   const [amount, setAmount] = useState("");
@@ -224,7 +241,7 @@ function WithdrawTokens(params: { amount: number }) {
         Withdraw Tokens
       </button>
       {isLoading && <div>Check Wallet...</div>}
-      {!isSuccess && <div>Failure fetching withdrawal.</div>}
+      {!isSuccess && isLoading && <div>Failure fetching withdrawal.</div>}
       {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
     </div>
   )
@@ -233,27 +250,107 @@ function WithdrawTokens(params: { amount: number }) {
 
 function CloseLottery() {
   const [data, setData] = useState<any>(null);
-  const [isLoading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("https://localhost:3001/close-lottery")
-      .then((res) => res.json())
-      .then((data) => {
-        setData(data.results[0]);
-        setLoading(false);
-      });
-  }, []);
+  const [isLoading, setLoading] = useState(false);
 
   if (isLoading) return (
     <div className={styles.button}>
-      CLOSE LOTTERY
+      Loading...
     </div>
   )
-  if (!data) return <p>No profile data</p>;
+
+  if (!data) return (
+    <button
+        disabled={isLoading}
+        className={styles.button}
+        onClick={() => {
+          setLoading(true);
+          fetch("http://localhost:3001/close-lottery")
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data);
+            setLoading(false)
+          });
+        }}
+    >
+      Close Lottery
+    </button>
+  );
 
   return (
     <div>
       <p>{data}</p>
     </div>
   );
+}
+
+function Bet() {
+  const [data, setData] = useState<any>(null);
+  const [isLoading, setLoading] = useState(false);
+
+  if (isLoading) return (
+    <div className={styles.button}>
+      Loading...
+    </div>
+  )
+
+  if (!data) return (
+    <button
+        disabled={isLoading}
+        className={styles.button}
+        onClick={() => {
+          setLoading(true);
+          fetch("http://localhost:3001/bet")
+          .then((res) => res.json())
+          .then((data) => {
+            setData(data);
+            setLoading(false)
+          });
+        }}
+    >
+      Place Bet
+    </button>
+  );
+
+  return (
+    <div>
+      <p>{data}</p>
+    </div>
+  );
+}
+
+function burnTokens() {
+  const { config } = usePrepareSendTransaction();
+  const { data, isLoading, isSuccess } = useSendTransaction(config);
+  const [amount, setAmount] = useState("");
+
+  if (isLoading) return <p>Requesting burn from API...</p>;
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount: amount })
+  };
+
+  if (!data) return (
+    <div>
+      <form>
+        <label>
+          Enter amount of tokens to burn:
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)} 
+          />
+        </label>
+      </form>
+      <button
+        disabled={isLoading} 
+        onClick={() => fetch("http://localhost:3001/burn-tokens", requestOptions)}>
+        Burn Tokens
+      </button>
+      {isLoading && <div>Check Wallet</div>}
+      {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>}
+    </div>
+  )
+  return <></>
 }
