@@ -47,6 +47,7 @@ function WalletInfo() {
         <TokenBalance address={address}></TokenBalance>
         <BuyTokens></BuyTokens>
         <WithdrawTokens></WithdrawTokens>
+        <BurnTokens></BurnTokens>
       </div>
     );
   if (isConnecting)
@@ -318,7 +319,7 @@ function Bet() {
   );
 }
 
-function burnTokens() {
+function BurnTokens() {
   const { config } = usePrepareSendTransaction();
   const { data, isLoading, isSuccess } = useSendTransaction(config);
   const [amount, setAmount] = useState("");
