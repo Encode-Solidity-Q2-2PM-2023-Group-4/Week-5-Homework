@@ -113,7 +113,7 @@ function TokenBalance(params: { address: `0x${string}` }) {
 
 function DisplayOwnerPool() {
   const [data, setData] = useState<any>(null);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   if (!data) return (
     <button
