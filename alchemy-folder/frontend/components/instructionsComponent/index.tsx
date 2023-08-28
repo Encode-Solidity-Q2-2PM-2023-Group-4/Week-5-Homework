@@ -176,14 +176,14 @@ function CheckState() {
 function BuyTokens() {
   const { config } = usePrepareSendTransaction();
   const { data, isLoading, isSuccess } = useSendTransaction(config);
-  const [amount, setAmount] = useState("");
+  const [value, setValue] = useState("");
 
   if (isLoading) return <p>Requesting purchase from API...</p>;
 
   const requestOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ amount: amount })
+    body: JSON.stringify({ value: value })
   };
 
   if (!data) return (
@@ -193,8 +193,8 @@ function BuyTokens() {
           Enter amount of tokens to purchase:
           <input
             type="number"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)} 
+            value={value}
+            onChange={(e) => setValue(e.target.value)} 
           />
         </label>
       </form>
